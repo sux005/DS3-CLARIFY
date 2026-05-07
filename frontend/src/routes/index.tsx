@@ -20,10 +20,10 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
+    <div className="flex flex-col md:flex-row min-h-screen bg-background text-foreground">
       <Sidebar />
-      <main className="flex-1 p-8 overflow-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full min-h-[calc(100vh-4rem)]">
+      <main className="flex-1 p-4 md:p-8 overflow-auto">
+        <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-1 lg:grid-cols-3 md:h-full md:min-h-[calc(100vh-4rem)]">
           <UploadSong />
           <LyricsInput />
           <Analysis />

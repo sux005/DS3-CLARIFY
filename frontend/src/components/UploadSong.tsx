@@ -31,7 +31,7 @@ export function UploadSong() {
         }}
         onDragLeave={() => setDragOver(false)}
         onDrop={onDrop}
-        className={`flex-1 cursor-pointer rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-3 p-6 text-center transition-all ${
+        className={`flex-1 min-h-[140px] cursor-pointer rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-3 p-6 text-center transition-all ${
           dragOver
             ? "border-primary bg-primary/5"
             : "border-border bg-background/40 hover:border-primary/60 hover:bg-background/60"
