@@ -1,0 +1,109 @@
+Song,Artist,Release_Year,SONG_ID,Key,Mode,Tempo,Duration,Popularity,Energy,Danceability,Happiness,Acousticness,Instrumentalness,Liveness,Speechiness,Loudness
+Vogue,Madonna,1990,7j5TIXPi0cCbSSqItmbyZy,D#,minor,116,5:17,68,84,75,31,0,1,44,4,-8 dB
+Enjoy the Silence,Depeche Mode,1990,0yp3TvJNlG50Q4tAHWNCRm,C,minor,113,4:15,76,84,66,75,20,0,8,3,-6 dB
+Ice Ice Baby,Vanilla Ice,1990,3XVozq1aeqsJwpXrEZrDJ9,D,major,116,4:14,72,79,98,58,0,0,10,4,-3 dB
+Black or White,Michael Jackson,1991,7EsjkelQuoUlJXEw7SeVV4,A,major,115,4:16,77,90,52,87,17,3,7,9,-4 dB
+Smells Like Teen Spirit,Nirvana,1991,5ghIJDpPoe3CfHMGu71E6T,C#,major,117,5:02,83,91,50,72,0,0,11,6,-5 dB
+Losing My Religion,R.E.M.,1991,31AOj9sFz2gM0O3hMARRBx,A,minor,126,4:28,88,86,67,80,18,0,10,3,-5 dB
+Baby Got Back,Sir Mix-a-Lot,1992,1SAkL1mYNJlaqnBQxVZrRl,C#,major,128,4:23,75,67,93,64,1,0,9,30,-11 dB
+I Will Always Love You,Whitney Houston,1992,4eHbdreAnSOrDDsFfc4Fpm,E,major,68,4:31,80,21,33,11,85,0,8,3,-13 dB
+Creep,Radiohead,1992,70LcF31zb1H0PyJoS1Sx1r,G,major,92,3:59,93,43,52,10,1,0,13,4,-10 dB
+C.R.E.A.M.,Wu-Tang Clan,1993,119c93MHjrDLJTApCVGpvx,B,minor,181,4:12,76,51,51,56,56,1,13,39,-12 dB
+All That She Wants,Ace of Base,1993,6kWJvPfC4DgUpRsXKNa9z9,B,major,94,3:31,82,63,80,86,1,0,10,5,-10 dB
+What Is Love,Haddaway,1993,0OTO8ZF2YqFQVw9hnZylTd,G,minor,124,4:30,67,77,68,74,2,2,20,3,-8 dB
+Black Hole Sun,Soundgarden,1994,2EoOZnxNgtmZaD8uUmz2nD,F#,major,105,5:19,80,83,35,15,0,0,8,4,-5 dB
+All I Want for Christmas Is You,Mariah Carey,1994,0bYg9bo50gSsH3LtXe2SQn,G,major,150,4:02,75,63,34,35,16,0,7,4,-7 dB
+Basket Case,Green Day,1994,6L89mwZXSOwYl76YXfX13s,Eb,major,85,3:02,86,94,44,78,0,0,9,6,-3 dB
+Wonderwall,Oasis,1995,7ygpwy2qP3NbrxVkHvUhXY,D,major,174,4:19,80,89,38,43,0,0,19,4,-4 dB
+Gangsta's Paradise,"Coolio, L.V.",1995,1DIXPcTDzTj8ZMHt3PDt8p,Ab,major,80,4:01,88,51,65,39,7,0,40,6,-10 dB
+Waterfalls,TLC,1995,6qspW4YKycviDFjHBOaqUY,C#,major,172,4:40,77,51,77,76,31,0,8,8,-7 dB
+Don't Speak,No Doubt,1996,6urCAbunOQI4bLhmGpX7iS,F,minor,76,4:23,62,75,51,55,25,0,14,3,-5 dB
+Wannabe,Spice Girls,1996,1Je1IMUlBXcx1Fz0WE7oPT,B,major,110,2:53,84,86,77,89,10,0,16,3,-6 dB
+California Love,"2Pac, Dr. Dre",1996,3ia3dJETSOllPsv3LJkE35,G,major,92,4:45,82,85,76,76,3,0,37,4,-3 dB
+Barbie Girl,Aqua,1997,5ZrDlcxIDZyjOzHdYW1ydr,C#,minor,130,3:18,78,88,81,96,2,22,37,4,-11 dB
+My Heart Will Go On,Céline Dion,1997,33LC84JgLvK2KuW43MfaNq,E,major,99,4:40,75,28,43,4,73,0,12,3,-12 dB
+Bitter Sweet Symphony,The Verve,1997,57iDDD9N9tTWe75x6qhStw,A,major,171,5:57,85,92,36,52,3,0,41,5,-6 dB
+The Boy Is Mine,"Brandy, Monica",1998,6sHsXIJoEN5JpdkGMQDJxt,C#,minor,93,4:55,78,71,70,76,54,0,32,4,-7 dB
+I Don't Want to Miss a Thing,Aerosmith,1998,5qlJg0Wbj3sslxfwiaRNpq,D,major,121,4:59,77,66,38,14,17,0,25,3,-5 dB
+...Baby One More Time,Britney Spears,1998,3MjUtNVVq3C8Fn0MP3zhXa,C,minor,93,3:31,86,70,76,91,20,0,44,3,-6 dB
+No Scrubs,TLC,1999,1KGi9sZVMeszgZOWivFpxs,G#,minor,93,3:34,85,68,74,59,3,0,7,10,-4 dB
+Smooth,"Santana, Rob Thomas",1999,2pX4FpOgwItRVPPUFdRcxA,A,major,116,4:55,73,92,61,96,16,0,30,3,-4 dB
+I Want It That Way,Backstreet Boys,1999,47BBI51FKFwOMlIiX6m8ya,F#,minor,99,3:33,86,69,69,48,26,0,15,3,-6 dB
+Oops!... I Did It Again,Britney Spears,2000,6naxalmIoLFWR0siv8dnQQ,C#,minor,95,3:31,83,83,75,89,30,0,36,4,-5 dB
+Bye Bye Bye,*NSYNC,2000,62bOmKYxYg7dhrC6gH9vFn,G#,minor,173,3:20,81,93,61,86,3,0,8,5,-5 dB
+Stan,"Eminem, Dido",2000,3UmaczJpikHgJFyBTAJVoz,F#,minor,80,6:44,83,77,78,51,4,0,52,24,-4 dB
+Fallin',Alicia Keys,2001,0KQx6HOpJueiSkztcS0r7D,B,minor,96,3:30,81,61,65,48,26,0,23,4,-8 dB
+In the End,Linkin Park,2001,60a0Rd6pjrkxjPbaKzXjfq,D#,minor,105,3:37,91,86,56,40,1,0,21,6,-6 dB
+How You Remind Me,Nickelback,2001,0gmbgwZ8iqyMPmXefof8Yf,Bb,major,172,3:44,88,76,45,54,0,0,10,3,-5 dB
+Hot in Herre,Nelly,2002,04KTF78FFg8sOHC1BADqbY,B,minor,107,3:48,80,74,96,91,20,0,6,12,-5 dB
+Lose Yourself,Eminem,2002,5Z01UMMf7V1o0MzF86s6WJ,D,major,171,5:26,81,74,69,6,1,0,36,26,-5 dB
+Complicated,Avril Lavigne,2002,5xEM5hIgJ1jjgcEBfpkt2F,F,major,78,4:05,86,78,59,43,6,0,30,5,-6 dB
+Hey Ya!,Outkast,2003,2PpruBYCo4H7WOBJ7Q2EwM,E,minor,80,3:55,84,97,73,97,10,0,17,7,-2 dB
+In da Club,50 Cent,2003,4RY96Asd9IefaL3X4LOLZ8,F#,minor,90,3:13,78,72,90,81,26,0,7,35,-3 dB
+Crazy in Love,"Beyoncé, JAY-Z",2003,5IVuqXILoxVWvWEPm82Jxr,D,minor,99,3:56,81,77,65,68,0,0,7,23,-7 dB
+Toxic,Britney Spears,2004,6I9VzXrHxO9rA9A5euc8Ak,F,minor,143,3:19,86,84,77,92,2,3,24,11,-4 dB
+Mr. Brightside,The Killers,2004,003vvx7Niy0yvhvHt4a68B,C#,major,148,3:43,91,91,35,24,0,0,10,7,-5 dB
+Yeah!,"Usher, Lil Jon, Ludacris",2004,5rb9QrpfcKFHM1EUbSIurX,D,major,105,4:10,87,79,89,58,2,0,4,11,-5 dB
+We Belong Together,Mariah Carey,2005,3LmvfNUQtglbTrydsdIqFU,C,major,140,3:21,73,47,83,77,3,0,9,6,-8 dB
+Gold Digger,"Kanye West, Jamie Foxx",2005,1PS1QMdUqOal0ai3Gt7sDQ,C#,minor,93,3:28,82,70,63,62,2,0,6,35,-6 dB
+Feel Good Inc.,Gorillaz,2005,0d28khcov6AiegSCpG5TuT,F#,major,139,3:43,92,71,82,77,1,0,61,18,-7 dB
+Crazy,Gnarls Barkley,2006,6o1l9I0faXJN2iqulHrdCQ,Ab,major,112,3:02,77,74,84,61,2,6,8,3,-2 dB
+Hips Don't Lie,"Shakira, Wyclef Jean",2006,3d0WouFnFmr0K3kjeza3fF,A#,minor,100,3:40,89,82,78,76,28,0,36,7,-6 dB
+SexyBack,Justin Timberlake,2006,0O45fw2L5vsWpdsOdXwNAR,G,minor,117,4:03,87,58,97,96,6,0,5,8,-6 dB
+Crank That (Soulja Boy),Soulja Boy,2007,66TRwr5uJwPt15mfFkzhbi,C,major,140,3:42,78,74,73,80,51,0,5,9,-2 dB
+Umbrella,"Rihanna, JAY-Z",2007,2yPoXCs7BSIUrucMdK5PzV,C#,major,174,4:36,86,83,59,58,1,0,4,12,-5 dB
+Stronger,Kanye West,2007,0j2T0R9dR9qdJYsB7ciXhf,C#,major,104,5:12,86,72,62,50,1,0,41,14,-8 dB
+Single Ladies (Put a Ring on It),Beyoncé,2008,2ZBNclC5wm4GtiWaeh0DMx,C#,major,193,3:13,69,58,43,27,4,0,19,30,-5 dB
+Poker Face,Lady Gaga,2008,5R8dQOPq8haW94K7mgERlO,E,major,119,3:57,82,81,85,77,12,0,12,8,-5 dB
+Viva La Vida,Coldplay,2008,1mea3bSkSGXuIRvnydlB5b,F,minor,138,4:02,89,62,49,42,10,0,11,3,-7 dB
+Bad Romance,Lady Gaga,2009,0SiywuOBRcynK0uKGWdCnn,C,major,119,4:54,51,92,69,71,0,0,9,4,-4 dB
+Tik Tok,Kesha,2009,0HPD5WQqrq7wPWR7P7Dw1i,D,minor,120,3:20,87,84,76,71,10,0,29,14,-3 dB
+I Gotta Feeling,Black Eyed Peas,2009,2H1047e0oMSj10dgp7p2VG,C,major,128,4:49,80,77,74,61,9,0,51,3,-6 dB
+Rolling in the Deep,Adele,2010,1c8gk2PeTE04A1pIDH9YMk,Ab,major,105,3:48,78,77,73,51,14,0,5,3,-5 dB
+Teenage Dream,Katy Perry,2010,5jzKL4BDMClWqRguW5qZvh,Bb,major,120,3:48,75,80,72,59,2,0,13,4,-5 dB
+Love the Way You Lie,"Eminem, Rihanna",2010,15JINEqzVMv3SvJTAXAKED,Bb,major,87,4:23,89,93,75,64,24,0,52,23,-5 dB
+We Found Love,"Rihanna, Calvin Harris",2011,6qn9YLKt13AGvpq9jfO8py,C#,major,128,3:35,87,77,74,60,3,0,11,4,-4 dB
+Somebody That I Used to Know,"Gotye, Kimbra",2011,4wCmqSrbyCgxEXROQE6vtV,C,major,129,4:05,79,50,86,72,59,0,10,4,-7 dB
+Party Rock Anthem,LMFAO,2011,0IkKz2J93C94Ei4BvDop7P,F,minor,130,4:22,73,73,75,36,2,0,27,14,-4 dB
+Thrift Shop,"Macklemore, Ryan Lewis",2012,6CjtS2JZH9RkDz5UVInsa9,F#,minor,95,3:56,69,53,78,66,6,0,5,29,-7 dB
+Gangnam Style,PSY,2012,03UrZgTINDqvnUMbbIMhql,B,minor,132,3:39,78,94,73,75,0,0,9,29,-3 dB
+Call Me Maybe,Carly Rae Jepsen,2012,3TGRqZ0a2l1LRblBkJoaDx,G,major,120,3:13,74,58,78,66,1,0,11,4,-7 dB
+Royals,Lorde,2013,2dLLR6qlu5UJ5gk0dKz0h3,G,major,85,3:10,62,43,67,34,12,0,13,12,-10 dB
+Wake Me Up,Avicii,2013,0nrRP2bk19rLc0orkWPQk2,D,major,124,4:07,87,78,53,64,0,0,16,5,-6 dB
+Get Lucky,"Daft Punk, Pharrell Williams",2013,69kOkLUCkxIZYexIgSG8rq,F#,minor,116,6:10,77,79,81,86,4,0,7,4,-9 dB
+Shake It Off,Taylor Swift,2014,5xTtaWoae3wi06K5WfVUUH,G,major,160,3:39,75,79,65,94,6,0,15,17,-5 dB
+Thinking Out Loud,Ed Sheeran,2014,1Slwb6dOYkBlWal1PGtnNg,D,major,79,4:42,86,45,78,59,47,0,18,3,-6 dB
+Uptown Funk,"Mark Ronson, Bruno Mars",2014,32OlwWuMpZ6b0aN2RZOeMS,C,major,115,4:30,86,61,86,93,1,0,3,8,-7 dB
+Hello,Adele,2015,62PaSfnXSMyLshYJrlTuL3,F,minor,79,4:56,73,43,58,29,33,0,9,3,-6 dB
+Hotline Bling,Drake,2015,0wwPcA6wtMf6HUMpIRdeP7,D,major,135,4:27,84,63,89,55,0,0,5,6,-8 dB
+See You Again,"Wiz Khalifa, Charlie Puth",2015,2JzZzZUQj3Qff7wapcbKjc,Bb,major,80,3:50,84,48,69,28,37,0,6,8,-8 dB
+Work,"Rihanna, Drake",2016,72TFWvU3wUYdUuxejTTIzt,B,major,92,3:39,82,53,72,55,7,0,9,9,-6 dB
+Closer,"The Chainsmokers, Halsey",2016,7BKLCZ1jbUBVqRi2FVlTVw,Ab,major,95,4:05,88,52,75,66,41,0,11,3,-6 dB
+Starboy,"The Weeknd, Daft Punk",2016,7MXVkk9YMctZqd1Srtv4MB,G,major,186,3:50,92,59,68,49,14,0,14,28,-7 dB
+HUMBLE.,Kendrick Lamar,2017,7KXjTSCq5nL1LoYtL7XAwS,C#,minor,150,2:57,85,62,91,42,0,0,10,10,-7 dB
+Shape of You,Ed Sheeran,2017,7qiZfU4dY1lWllzX7mPBI3,C#,minor,96,3:54,90,65,83,93,58,0,9,8,-3 dB
+Despacito,"Luis Fonsi, Daddy Yankee",2017,6habFhsOp2NvshLv26DqMb,D,major,178,3:49,82,80,66,84,20,0,7,15,-5 dB
+"thank u, next",Ariana Grande,2018,3e9HZxeyfWwjeyPAMmWSSQ,C#,major,107,3:27,84,65,72,41,23,0,10,6,-6 dB
+Shallow,"Lady Gaga, Bradley Cooper",2018,2VxeLyX666F8uXCJ0dZF8B,G,major,96,3:36,84,39,58,33,37,0,23,3,-6 dB
+God's Plan,Drake,2018,6DCZcSspjsKoFjzjrWoCdn,Ab,major,85,3:13,1,50,67,39,36,0,14,6,-12 dB
+bad guy,Billie Eilish,2019,2Fxmhks0bxGSBdJ92vM42m,G,major,135,3:14,83,43,70,56,33,13,10,38,-11 dB
+Blinding Lights,The Weeknd,2019,0VjIjW4GlUZAMYd2vXMi3b,C#,major,171,3:20,89,73,51,33,0,0,9,6,-6 dB
+Old Town Road,"Lil Nas X, Billy Ray Cyrus",2019,2YpeDb67231RjR0MgVLzsG,F#,major,136,2:37,79,62,88,64,5,0,11,10,-6 dB
+Watermelon Sugar,Harry Styles,2020,6UelLqGlWMcVH1E5c4H7lY,C,major,95,2:54,87,82,55,56,12,0,34,5,-4 dB
+Levitating,Dua Lipa,2020,5nujrmhLynf4yMoMtj8AQF,F#,minor,103,3:23,84,83,70,92,1,0,7,6,-4 dB
+WAP,"Cardi B, Megan Thee Stallion",2020,4Oun2ylbjFKMPTiaSbbCih,C#,major,133,3:08,74,45,94,36,2,0,8,38,-8 dB
+MONTERO (Call Me By Your Name),Lil Nas X,2021,1SC5rEoYDGUK4NfG82494W,G#,minor,179,2:18,72,51,61,76,30,0,38,15,-7 dB
+drivers license,Olivia Rodrigo,2021,5wANPM4fQCJwkGd4rN57mH,Bb,major,144,4:02,87,43,56,14,77,0,11,6,-9 dB
+STAY,"The Kid LAROI, Justin Bieber",2021,567e29TDzLwZwfDuEpGTwo,C#,major,170,2:22,81,76,59,48,4,0,10,5,-5 dB
+Kill Bill,SZA,2022,1Qrg8KqiBpW07V7PNxwwwL,Ab,major,89,2:34,79,73,64,43,5,17,16,4,-6 dB
+As It Was,Harry Styles,2022,4Dvkj6JhhA12EX05fT7y2e,F#,minor,174,2:47,91,73,52,66,34,0,31,6,-5 dB
+Anti-Hero,Taylor Swift,2022,0V3wPSX9ygBnCm8psDIegu,E,major,97,3:21,80,65,63,49,12,0,16,6,-7 dB
+Paint The Town Red,Doja Cat,2023,2IGMVunIBsBLtEQyoI1Mu7,F,major,100,3:52,77,54,87,73,27,0,9,17,-9 dB
+vampire,Olivia Rodrigo,2023,1kuGVB7EU95pJObxwvfwKS,F,major,137,3:40,86,53,48,32,15,0,26,5,-6 dB
+Flowers,Miley Cyrus,2023,7DSAEUvxU8FajXtRloy8M0,C,major,118,3:21,88,69,71,63,6,0,2,6,-5 dB
+Espresso,Sabrina Carpenter,2024,2HRqTpkrJO5ggZyyK6NPWz,C,major,104,2:55,69,74,71,73,12,0,15,3,-5 dB
+A Bar Song (Tipsy),Shaboozey,2024,5fZJQrFKWQLb7FpJXZ1g7K,A,major,81,2:51,83,71,72,60,6,0,8,3,-5 dB
+Not Like Us,Kendrick Lamar,2024,6AI3ezQ4o3HUoP6Dhudph3,C#,major,101,4:34,87,47,90,21,1,0,14,8,-7 dB
+Die With A Smile,"Lady Gaga, Bruno Mars",2025,2plbrEY59IikOBgBGLjaoe,F#,minor,158,4:12,92,59,52,54,31,0,12,3,-8 dB
+luther,"Kendrick Lamar, SZA",2025,2CGNAOSuO1MEFCbBRgUzjd,D,major,138,2:58,83,57,71,58,25,0,25,13,-8 dB
+Ordinary,Alex Warren,2025,2RkZ5LkEzeHGRsmDqKwmaJ,D,major,112,3:07,89,68,45,38,74,0,6,5,-6 dB
