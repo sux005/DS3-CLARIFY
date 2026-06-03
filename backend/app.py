@@ -32,11 +32,15 @@ CORS(app)  # allows the Netlify frontend to call this API
 # ─────────────────────────────────────────────
 # Load model(s) at startup (not per-request)
 # ─────────────────────────────────────────────
-MODEL_DIR = os.path.join(os.path.dirname(__file__), "models")
+REPO_ROOT = os.path.join(os.path.dirname(__file__), "..")
 
-# TODO: replace these filenames with your actual .pkl names
-# hit_model      = joblib.load(os.path.join(MODEL_DIR, "hit_score_model.pkl"))
-# nostalgia_model = joblib.load(os.path.join(MODEL_DIR, "nostalgia_model.pkl"))
+# Recommender model — finds similar songs from the 3,561-song dataset
+RECOMMENDER_PATH = os.path.join(REPO_ROOT, "audio", "model_outputs", "audio_recommender_index.joblib")
+recommender = joblib.load(RECOMMENDER_PATH)
+
+# Hit score model — NOT ready yet ("audio_hit_models": null in metadata)
+# TODO: Saksham — uncomment when trained and saved
+# hit_model = joblib.load(os.path.join(REPO_ROOT, "audio", "model_outputs", "hit_model.joblib"))
 
 
 # ─────────────────────────────────────────────
@@ -112,24 +116,45 @@ def predict():
     audio_features = data.get("audioFeatures", {})
     lyrics_features = data.get("lyricsFeatures") or {}
 
-    # TODO: Saksham — build your feature vector from audio_features + lyrics_features
-    # and run it through your model. Replace the block below with real inference.
-    #
-    # feature_vector = build_feature_vector(audio_features, lyrics_features)
-    # hit_score      = int(hit_model.predict([feature_vector])[0])
-    # nostalgia_score = int(nostalgia_model.predict([feature_vector])[0])
+    # Build the 40-feature vector the recommender expects
+    # (year, tempo, mfcc_1..13, chroma_mean_1..12, chroma_std_1..12, spectral_centroid)
+    feature_keys = (
+        ["year", "tempo"]
+        + [f"mfcc_{i}" for i in range(1, 14)]
+        + [f"chroma_mean_{i}" for i in range(1, 13)]
+        + [f"chroma_std_{i}" for i in range(1, 13)]
+        + ["spectral_centroid"]
+    )
+    feature_vector = np.array([[audio_features.get(k, 0) for k in feature_keys]])
 
-    hit_score      = 0   # placeholder
-    nostalgia_score = 0  # placeholder
+    # Find similar songs using the recommender
+    try:
+        distances, indices = recommender.kneighbors(feature_vector, n_neighbors=3)
+        # recommender stores song metadata — pull titles + artists
+        recommendations = []
+        for idx in indices[0]:
+            rec = recommender._fit_X_metadata[idx] if hasattr(recommender, "_fit_X_metadata") else {}
+            recommendations.append({
+                "title":  rec.get("SONG_TITLE", f"Similar Song {idx}"),
+                "artist": rec.get("ARTIST_NAME", "Unknown"),
+                "reason": "Similar audio profile",
+            })
+    except Exception:
+        recommendations = []
+
+    # Hit score — placeholder until Saksham's hit model is trained
+    # TODO: hit_score = int(hit_model.predict(feature_vector)[0])
+    hit_score      = 0
+    nostalgia_score = 0
 
     return jsonify({
-        "hitScore":       hit_score,
-        "nostalgiaScore": nostalgia_score,
-        "genre":          audio_features.get("genre", "Unknown"),
-        "mood":           lyrics_features.get("mood", "Unknown"),
-        "tempo":          audio_features.get("tempo", 0),
-        "key":            audio_features.get("spotify_key", "Unknown"),
-        "recommendations": [],
+        "hitScore":        hit_score,
+        "nostalgiaScore":  nostalgia_score,
+        "genre":           "Unknown",  # TODO: add genre classifier
+        "mood":            lyrics_features.get("mood", "Unknown"),
+        "tempo":           audio_features.get("tempo", 0),
+        "key":             str(audio_features.get("spotify_key", "Unknown")),
+        "recommendations": recommendations,
     })
 
 
