@@ -22,8 +22,8 @@ load_dotenv()
 # CONFIG
 # ─────────────────────────────────────────────
 
-MASTER_DATASET_PATH = os.path.join(os.path.dirname(__file__), "../data/training_data/master_audio_features.csv")
-CACHE_PATH = os.path.join(os.path.dirname(__file__), "../data/training_data/audio_cache.csv")
+MASTER_DATASET_PATH = os.path.join(os.path.dirname(__file__), "../data/audio/master_audio_features.csv")
+CACHE_PATH = os.path.join(os.path.dirname(__file__), "../data/audio/audio_cache.csv")
 SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 
