@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
-import { Cpu, Disc3, Flame } from "lucide-react";
+import { Cpu, Disc3, Flame, Loader2, AlertCircle } from "lucide-react";
 import { Panel } from "./Panel";
+import type { Prediction } from "@/services/predictionService";
 
 function SubCard({
   title,
@@ -24,46 +25,122 @@ function SubCard({
   );
 }
 
-export function Analysis() {
-  const score = 0;
+interface AnalysisProps {
+  prediction: Prediction | null;
+  isLoading: boolean;
+  error: string | null;
+}
 
+export function Analysis({ prediction, isLoading, error }: AnalysisProps) {
+  const score = prediction?.hitScore ?? 0;
+
+  // ── Loading ──────────────────────────────────────────────────────────────
+  if (isLoading) {
+    return (
+      <Panel title="Analysis">
+        <div className="flex flex-col items-center justify-center flex-1 gap-3 py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground">Analyzing your song…</p>
+          <p className="text-xs text-muted-foreground/60">
+            First-time searches download audio — this may take 30–60s
+          </p>
+        </div>
+      </Panel>
+    );
+  }
+
+  // ── Error ─────────────────────────────────────────────────────────────────
+  if (error) {
+    return (
+      <Panel title="Analysis">
+        <div className="flex flex-col items-center justify-center flex-1 gap-3 py-12">
+          <AlertCircle className="h-8 w-8 text-destructive" />
+          <p className="text-sm text-destructive text-center max-w-[220px]">{error}</p>
+        </div>
+      </Panel>
+    );
+  }
+
+  // ── Results / Placeholder ─────────────────────────────────────────────────
   return (
     <Panel title="Analysis">
       <div className="flex flex-col gap-4">
+
+        {/* Model Outputs */}
         <SubCard title="Model Outputs" icon={<Cpu className="h-4 w-4" />}>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Run an analysis to see model predictions — genre, mood, tempo, key and
-            sentiment will appear here.
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {["Genre", "Mood", "Tempo", "Key"].map((t) => (
-              <span
-                key={t}
-                className="text-[10px] uppercase tracking-wider px-2 py-1 rounded-md bg-secondary text-muted-foreground"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
+          {prediction ? (
+            <div className="mt-1 flex flex-wrap gap-2">
+              {[
+                { label: "Genre", value: prediction.genre },
+                { label: "Mood",  value: prediction.mood },
+                { label: "Tempo", value: `${Math.round(prediction.tempo)} BPM` },
+                { label: "Key",   value: prediction.key },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex flex-col gap-0.5">
+                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                    {label}
+                  </span>
+                  <span className="text-xs font-medium text-foreground px-2 py-1 rounded-md bg-secondary">
+                    {value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Run an analysis to see model predictions — genre, mood, tempo, key and
+                sentiment will appear here.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {["Genre", "Mood", "Tempo", "Key"].map((t) => (
+                  <span
+                    key={t}
+                    className="text-[10px] uppercase tracking-wider px-2 py-1 rounded-md bg-secondary text-muted-foreground"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
         </SubCard>
 
+        {/* Song Recommendations */}
         <SubCard title="Song Recommendations" icon={<Disc3 className="h-4 w-4" />}>
           <ul className="space-y-2">
-            {[1, 2, 3].map((i) => (
-              <li
-                key={i}
-                className="flex items-center gap-3 rounded-lg bg-secondary/40 px-3 py-2"
-              >
-                <div className="h-8 w-8 rounded-md bg-gradient-to-br from-primary/40 to-primary-glow/40" />
-                <div className="flex-1 min-w-0">
-                  <div className="h-2.5 w-24 rounded-full bg-muted" />
-                  <div className="h-2 w-16 rounded-full bg-muted/60 mt-1.5" />
-                </div>
-              </li>
-            ))}
+            {prediction?.recommendations?.length ? (
+              prediction.recommendations.map((rec, i) => (
+                <li
+                  key={i}
+                  className="flex items-center gap-3 rounded-lg bg-secondary/40 px-3 py-2"
+                >
+                  <div className="h-8 w-8 rounded-md bg-gradient-to-br from-primary/40 to-primary-glow/40 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-foreground truncate">{rec.title}</p>
+                    <p className="text-[10px] text-muted-foreground truncate">{rec.artist}</p>
+                  </div>
+                </li>
+              ))
+            ) : (
+              // Skeleton placeholders
+              [1, 2, 3].map((i) => (
+                <li
+                  key={i}
+                  className="flex items-center gap-3 rounded-lg bg-secondary/40 px-3 py-2"
+                >
+                  <div className="h-8 w-8 rounded-md bg-gradient-to-br from-primary/40 to-primary-glow/40" />
+                  <div className="flex-1 min-w-0">
+                    <div className="h-2.5 w-24 rounded-full bg-muted" />
+                    <div className="h-2 w-16 rounded-full bg-muted/60 mt-1.5" />
+                  </div>
+                </li>
+              ))
+            )}
           </ul>
         </SubCard>
 
+        {/* Hit Score */}
         <SubCard title="Hit Score" icon={<Flame className="h-4 w-4" />}>
           <div className="flex items-end gap-3">
             <div className="text-4xl font-bold bg-gradient-to-br from-primary to-primary-glow bg-clip-text text-transparent">
@@ -73,7 +150,7 @@ export function Analysis() {
           </div>
           <div className="mt-3 h-2 w-full rounded-full bg-secondary overflow-hidden">
             <div
-              className="h-full rounded-full transition-all"
+              className="h-full rounded-full transition-all duration-700"
               style={{
                 width: `${score}%`,
                 background: "var(--gradient-primary)",
@@ -81,9 +158,12 @@ export function Analysis() {
             />
           </div>
           <p className="text-xs text-muted-foreground mt-2">
-            Awaiting analysis to estimate commercial potential.
+            {prediction
+              ? `Nostalgia score: ${prediction.nostalgiaScore} / 100`
+              : "Awaiting analysis to estimate commercial potential."}
           </p>
         </SubCard>
+
       </div>
     </Panel>
   );

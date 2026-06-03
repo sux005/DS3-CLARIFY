@@ -1,13 +1,26 @@
-import { useRef, useState, DragEvent } from "react";
-import { Upload, Music } from "lucide-react";
+import { useRef, DragEvent } from "react";
+import { Upload, Music, Loader2 } from "lucide-react";
 import { Panel } from "./Panel";
 
-export function UploadSong() {
+interface UploadSongProps {
+  file: File | null;
+  setFile: (f: File | null) => void;
+  title: string;
+  setTitle: (v: string) => void;
+  artist: string;
+  setArtist: (v: string) => void;
+  isLoading: boolean;
+  onAnalyze: () => void;
+}
+
+export function UploadSong({
+  file, setFile,
+  title, setTitle,
+  artist, setArtist,
+  isLoading,
+  onAnalyze,
+}: UploadSongProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<File | null>(null);
-  const [dragOver, setDragOver] = useState(false);
-  const [title, setTitle] = useState("");
-  const [artist, setArtist] = useState("");
 
   const handleFile = (f: File | null | undefined) => {
     if (!f) return;
@@ -17,22 +30,19 @@ export function UploadSong() {
 
   const onDrop = (e: DragEvent) => {
     e.preventDefault();
-    setDragOver(false);
     handleFile(e.dataTransfer.files?.[0]);
   };
+
+  const canAnalyze = (!!file || title.trim().length > 0) && !isLoading;
 
   return (
     <Panel title="Upload Song">
       <div
         onClick={() => inputRef.current?.click()}
-        onDragOver={(e) => {
-          e.preventDefault();
-          setDragOver(true);
-        }}
-        onDragLeave={() => setDragOver(false)}
+        onDragOver={(e) => e.preventDefault()}
         onDrop={onDrop}
         className={`flex-1 min-h-[140px] cursor-pointer rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-3 p-6 text-center transition-all ${
-          dragOver
+          file
             ? "border-primary bg-primary/5"
             : "border-border bg-background/40 hover:border-primary/60 hover:bg-background/60"
         }`}
@@ -60,7 +70,7 @@ export function UploadSong() {
             <div>
               <p className="text-sm font-medium text-foreground">Drag & drop audio</p>
               <p className="text-xs text-muted-foreground mt-1">
-                MP3, WAV, FLAC, M4A, OGG
+                MP3, WAV, FLAC, M4A, OGG — or enter title below
               </p>
             </div>
           </>
@@ -73,17 +83,6 @@ export function UploadSong() {
           onChange={(e) => handleFile(e.target.files?.[0])}
         />
       </div>
-
-      <button
-        type="button"
-        className="mt-5 w-full rounded-xl py-3 text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.98]"
-        style={{
-          background: "var(--gradient-primary)",
-          boxShadow: "var(--shadow-glow)",
-        }}
-      >
-        Analyze
-      </button>
 
       <div className="grid grid-cols-2 gap-3 mt-4">
         <label className="flex flex-col gap-1.5">
@@ -107,6 +106,26 @@ export function UploadSong() {
           />
         </label>
       </div>
+
+      <button
+        type="button"
+        onClick={onAnalyze}
+        disabled={!canAnalyze}
+        className="mt-5 w-full rounded-xl py-3 text-sm font-semibold text-primary-foreground transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        style={{
+          background: "var(--gradient-primary)",
+          boxShadow: canAnalyze ? "var(--shadow-glow)" : "none",
+        }}
+      >
+        {isLoading ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Analyzing…
+          </>
+        ) : (
+          "Analyze"
+        )}
+      </button>
     </Panel>
   );
 }
