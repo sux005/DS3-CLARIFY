@@ -1,7 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL ?? "";
 
 // Matches the output of song_search.py → extract_librosa_features()
-// Used when the user uploads their own audio file (not a known song)
+// Used when the user uploads their own audio file (not a known song).
 export interface AudioFeatures {
   tempo: number;
   mfcc_1: number;  mfcc_2: number;  mfcc_3: number;  mfcc_4: number;  mfcc_5: number;
@@ -18,8 +18,8 @@ export interface AudioFeatures {
   spectral_centroid: number;
 }
 
-// Uploads an audio file to the backend, which runs librosa on it and returns features.
-// POST /analyze/audio — accepts multipart/form-data with a "file" field
+// Uploads an audio file to the backend, runs librosa, returns features.
+// POST /analyze/audio — multipart/form-data with a "file" field.
 export async function extractAudioFeatures(file: File): Promise<AudioFeatures> {
   const body = new FormData();
   body.append("file", file);

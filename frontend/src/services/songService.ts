@@ -38,7 +38,8 @@ export interface SongRecord {
   spotify_duration_ms?:      number;
 }
 
-// Calls the backend's /search endpoint which runs song_search.py → get_song_features()
+// Calls the backend's /search endpoint → song_search.py → get_song_features()
+// Returns null if the song isn't found.
 export async function searchSong(
   title: string,
   artist: string,
