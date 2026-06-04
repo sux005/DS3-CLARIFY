@@ -20,9 +20,16 @@ export interface ConceptScore {
 }
 
 export interface Prediction {
-  hitScore: number; // 0-100
+  hitScore: number;
   concepts: ConceptScore[];
   recommendations: SongRecommendation[];
+  key?: string;
+  tempo?: number;
+  brightness?: number;
+  year?: number;
+  title?: string;
+  artist?: string;
+  mood?: string | null;
 }
 
 function normalizePrediction(data: any): Prediction {
@@ -30,26 +37,30 @@ function normalizePrediction(data: any): Prediction {
   const concepts = data.concepts ?? data.model_outputs?.concepts ?? [];
 
   return {
-    hitScore: Math.round(Number(rawScore) || 0),
-    concepts: concepts.map((concept: any) => ({
-      name: String(concept.name ?? concept.label ?? ""),
-      score: Number(concept.score ?? concept.value ?? 0),
-      column: concept.column,
+    hitScore:    Math.round(Number(rawScore) || 0),
+    key:         data.key ?? undefined,
+    tempo:       data.tempo ? Number(data.tempo) : undefined,
+    brightness:  data.brightness != null ? Number(data.brightness) : undefined,
+    year:        data.year ? Number(data.year) : undefined,
+    title:       data.title || undefined,
+    artist:      data.artist || undefined,
+    mood:        data.mood ?? null,
+    concepts: concepts.map((c: any) => ({
+      name:   String(c.name ?? c.label ?? ""),
+      score:  Number(c.score ?? c.value ?? 0),
+      column: c.column,
     })),
     recommendations: (data.recommendations ?? []).map((rec: any) => ({
-      title: String(rec.title ?? rec.recommended_title ?? ""),
-      artist: String(rec.artist ?? rec.recommended_artist ?? ""),
-      reason: String(rec.reason ?? "Similar audio, lyrics, and CBM concepts"),
+      title:      String(rec.title ?? ""),
+      artist:     String(rec.artist ?? ""),
+      reason:     String(rec.reason ?? "Similar audio, lyrics, and CBM concepts"),
       similarity: rec.similarity,
-      song_id: rec.song_id ?? rec.recommended_song_id,
-      audio_id: rec.audio_id ?? rec.recommended_audio_id,
+      song_id:    rec.song_id,
+      audio_id:   rec.audio_id,
     })),
   };
 }
 
-// Sends combined audio + lyrics features to the ML model.
-// audioInput can be a SongRecord from searchSong or AudioFeatures from file upload.
-// lyricsFeatures is null when no lyrics were provided.
 export async function predict(
   audioInput: AudioFeatures | SongRecord,
   lyricsFeatures: LyricsFeatures | null,

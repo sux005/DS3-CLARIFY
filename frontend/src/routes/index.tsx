@@ -13,33 +13,28 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Clarify — AI Song Analysis" },
+      { title: "CLARIFY — AI Song Analysis" },
       {
         name: "description",
         content:
-          "Upload a song, paste lyrics and get AI-powered analysis: model outputs, recommendations and a hit score.",
+          "Upload a song, paste lyrics and get AI-powered analysis: CBM concepts, song recommendations and a hit score.",
       },
     ],
   }),
 });
 
 function Index() {
-  // Shared input state (lifted from UploadSong + LyricsInput)
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
   const [lyrics, setLyrics] = useState("");
-
-  // Analysis state
   const [isLoading, setIsLoading] = useState(false);
   const [prediction, setPrediction] = useState<Prediction | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleAnalyze = async () => {
-    // Need at least a file or a song title
     if (!file && !title.trim()) return;
 
-    // Backend must be configured
     if (!import.meta.env.VITE_API_URL) {
       setError("Backend not connected yet — deploy the Render API and set VITE_API_URL.");
       return;
@@ -50,14 +45,11 @@ function Index() {
     setPrediction(null);
 
     try {
-      // Run audio retrieval and lyrics analysis in parallel
       const [audioResult, lyricsResult] = await Promise.all([
         file
-          ? extractAudioFeatures(file)                      // uploaded file → librosa
-          : searchSong(title.trim(), artist.trim()),        // title/artist → song_search.py
-        lyrics.trim()
-          ? analyzeLyrics(lyrics.trim())
-          : Promise.resolve(null),
+          ? extractAudioFeatures(file)
+          : searchSong(title.trim(), artist.trim()),
+        lyrics.trim() ? analyzeLyrics(lyrics.trim()) : Promise.resolve(null),
       ]);
 
       if (!audioResult) {
@@ -77,20 +69,34 @@ function Index() {
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-background text-foreground">
       <Sidebar />
-      <main className="flex-1 p-4 md:p-8 overflow-auto">
-        <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-1 lg:grid-cols-3 md:h-full md:min-h-[calc(100vh-4rem)]">
-          <UploadSong
-            file={file}
-            setFile={setFile}
-            title={title}
-            setTitle={setTitle}
-            artist={artist}
-            setArtist={setArtist}
-            isLoading={isLoading}
-            onAnalyze={handleAnalyze}
-          />
-          <LyricsInput lyrics={lyrics} setLyrics={setLyrics} />
-          <Analysis prediction={prediction} isLoading={isLoading} error={error} />
+      <main className="flex-1 p-4 md:p-6 overflow-auto">
+        {/* Two-column layout: inputs left, analysis right (bigger) */}
+        <div className="h-full grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-6 min-h-[calc(100vh-3rem)]">
+
+          {/* Left column — Upload + Lyrics stacked */}
+          <div className="flex flex-col gap-4 lg:col-span-2">
+            <UploadSong
+              file={file}
+              setFile={setFile}
+              title={title}
+              setTitle={setTitle}
+              artist={artist}
+              setArtist={setArtist}
+              isLoading={isLoading}
+              onAnalyze={handleAnalyze}
+            />
+            <LyricsInput lyrics={lyrics} setLyrics={setLyrics} />
+          </div>
+
+          {/* Right column — Analysis (wider) */}
+          <div className="lg:col-span-3 flex flex-col">
+            <Analysis
+              prediction={prediction}
+              isLoading={isLoading}
+              error={error}
+            />
+          </div>
+
         </div>
       </main>
     </div>

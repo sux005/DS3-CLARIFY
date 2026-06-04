@@ -136,9 +136,17 @@ def predict():
     audio_features  = data.get("audioFeatures", {})
     lyrics_features = data.get("lyricsFeatures") or {}
 
-    # SONG_ID from searchSong maps directly to audio_id in the dashboard payload
-    song_id = audio_features.get("SONG_ID")
+    # ── Derive musical key from chroma bins (C C# D D# E F F# G G# A A# B)
+    KEY_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+    chroma = [float(audio_features.get(f"chroma_mean_{i}", 0)) for i in range(1, 13)]
+    key = KEY_NAMES[chroma.index(max(chroma))] if any(chroma) else "Unknown"
 
+    # ── Brightness score 0-100 from spectral centroid (typical range 500-5000 Hz)
+    sc = float(audio_features.get("spectral_centroid", 0))
+    brightness = min(100, max(0, round((sc - 500) / 45)))
+
+    # ── Dashboard lookup — SONG_ID matches audio_id in the payload
+    song_id = audio_features.get("SONG_ID")
     if song_id and int(song_id) in dashboard_by_audio_id:
         record          = dashboard_by_audio_id[int(song_id)]
         concepts        = record.get("model_outputs", {}).get("concepts", [])
@@ -146,20 +154,21 @@ def predict():
         hit_score_raw   = (record.get("hit_score") or {}).get("score_100")
         hit_score       = int(hit_score_raw) if hit_score_raw is not None else 0
     else:
-        # Song not in pre-computed dataset — return empty results
         concepts        = []
         recommendations = []
         hit_score       = 0
-
-    # Enrich mood from lyrics if available
-    mood = lyrics_features.get("mood", "Unknown")
 
     return jsonify({
         "hitScore":        hit_score,
         "concepts":        concepts,
         "recommendations": recommendations,
-        "mood":            mood,
-        "tempo":           audio_features.get("tempo", 0),
+        "key":             key,
+        "tempo":           round(float(audio_features.get("tempo", 0)), 1),
+        "brightness":      brightness,
+        "year":            audio_features.get("year"),
+        "title":           audio_features.get("SONG_TITLE", ""),
+        "artist":          audio_features.get("ARTIST_NAME", ""),
+        "mood":            lyrics_features.get("mood", None),
     })
 
 
