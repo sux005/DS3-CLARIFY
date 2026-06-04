@@ -2,14 +2,16 @@
 CLARIFY Backend API
 ===================
 Endpoints:
+  GET  /health               → confirms the server is up
   GET  /search               → song_search.py → get_song_features()
   POST /analyze/audio        → librosa feature extraction on uploaded file
   POST /analyze/lyrics       → sentiment/NLP on lyrics text
-  POST /predict              → ML model → hit score + nostalgia score
+  POST /predict              → dashboard_payload lookup → concepts + recommendations
 """
 
 import os
 import sys
+import json
 import joblib
 import numpy as np
 from flask import Flask, request, jsonify
@@ -27,20 +29,35 @@ from lyrics.lyrics_pipeline import (
 )
 
 app = Flask(__name__)
-CORS(app)  # allows the Netlify frontend to call this API
+CORS(app)
 
-# ─────────────────────────────────────────────
-# Load model(s) at startup (not per-request)
-# ─────────────────────────────────────────────
 REPO_ROOT = os.path.join(os.path.dirname(__file__), "..")
 
-# Recommender model — finds similar songs from the 3,561-song dataset
-RECOMMENDER_PATH = os.path.join(REPO_ROOT, "audio", "model_outputs", "audio_recommender_index.joblib")
-recommender = joblib.load(RECOMMENDER_PATH)
+# ─────────────────────────────────────────────
+# Load dashboard_payload.json at startup
+# Pre-computed concepts + recommendations for 2,405 songs
+# ─────────────────────────────────────────────
+DASHBOARD_PATH = os.path.join(REPO_ROOT, "data", "lyrics", "dashboard_payload.json")
+dashboard_by_audio_id = {}
 
-# Hit score model — NOT ready yet ("audio_hit_models": null in metadata)
-# TODO: Saksham — uncomment when trained and saved
-# hit_model = joblib.load(os.path.join(REPO_ROOT, "audio", "model_outputs", "hit_model.joblib"))
+try:
+    with open(DASHBOARD_PATH) as f:
+        dashboard_data = json.load(f)
+    for record in dashboard_data.get("records", []):
+        audio_id = record.get("audio_id")
+        if audio_id is not None:
+            dashboard_by_audio_id[int(audio_id)] = record
+    print(f"✓ Loaded dashboard payload: {len(dashboard_by_audio_id)} songs")
+except Exception as e:
+    print(f"✗ Could not load dashboard payload: {e}")
+
+
+# ─────────────────────────────────────────────
+# GET /health
+# ─────────────────────────────────────────────
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok", "songs_indexed": len(dashboard_by_audio_id)})
 
 
 # ─────────────────────────────────────────────
@@ -70,15 +87,18 @@ def analyze_audio():
     if "file" not in request.files:
         return jsonify({"error": "No file uploaded"}), 400
 
-    audio_file = request.files["file"]
-
     import tempfile, librosa
+    audio_file = request.files["file"]
     with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
         audio_file.save(tmp.name)
-        y, sr = librosa.load(tmp.name)
-    os.unlink(tmp.name)
+        tmp_path = tmp.name
 
-    features = extract_librosa_features(y, sr)
+    try:
+        y, sr = librosa.load(tmp_path)
+        features = extract_librosa_features(y, sr)
+    finally:
+        os.unlink(tmp_path)
+
     return jsonify(features)
 
 
@@ -94,7 +114,7 @@ def analyze_lyrics():
         return jsonify({"error": "lyrics text is required"}), 400
 
     sentiment = sentiment_features(lyrics)
-    result = {
+    return jsonify({
         "sentiment":       sentiment["Sentiment_Score"],
         "mood":            "Positive" if sentiment["Sentiment_Score"] > 0.05
                            else "Negative" if sentiment["Sentiment_Score"] < -0.05
@@ -102,59 +122,44 @@ def analyze_lyrics():
         "wordCount":       word_count(lyrics),
         "uniqueWordRatio": vocabulary_diversity(lyrics),
         "repetitionScore": repetition_score(lyrics),
-        "topThemes":       [],  # placeholder until theme model is wired in
-    }
-    return jsonify(result)
+        "topThemes":       [],
+    })
 
 
 # ─────────────────────────────────────────────
-# POST /predict  { "audioFeatures": {...}, "lyricsFeatures": {...} }
+# POST /predict
+# { "audioFeatures": {...}, "lyricsFeatures": {...} }
 # ─────────────────────────────────────────────
 @app.route("/predict", methods=["POST"])
 def predict():
-    data           = request.get_json()
-    audio_features = data.get("audioFeatures", {})
+    data            = request.get_json() or {}
+    audio_features  = data.get("audioFeatures", {})
     lyrics_features = data.get("lyricsFeatures") or {}
 
-    # Build the 40-feature vector the recommender expects
-    # (year, tempo, mfcc_1..13, chroma_mean_1..12, chroma_std_1..12, spectral_centroid)
-    feature_keys = (
-        ["year", "tempo"]
-        + [f"mfcc_{i}" for i in range(1, 14)]
-        + [f"chroma_mean_{i}" for i in range(1, 13)]
-        + [f"chroma_std_{i}" for i in range(1, 13)]
-        + ["spectral_centroid"]
-    )
-    feature_vector = np.array([[audio_features.get(k, 0) for k in feature_keys]])
+    # SONG_ID from searchSong maps directly to audio_id in the dashboard payload
+    song_id = audio_features.get("SONG_ID")
 
-    # Find similar songs using the recommender
-    try:
-        distances, indices = recommender.kneighbors(feature_vector, n_neighbors=3)
-        # recommender stores song metadata — pull titles + artists
+    if song_id and int(song_id) in dashboard_by_audio_id:
+        record          = dashboard_by_audio_id[int(song_id)]
+        concepts        = record.get("model_outputs", {}).get("concepts", [])
+        recommendations = record.get("recommendations", [])[:5]
+        hit_score_raw   = (record.get("hit_score") or {}).get("score_100")
+        hit_score       = int(hit_score_raw) if hit_score_raw is not None else 0
+    else:
+        # Song not in pre-computed dataset — return empty results
+        concepts        = []
         recommendations = []
-        for idx in indices[0]:
-            rec = recommender._fit_X_metadata[idx] if hasattr(recommender, "_fit_X_metadata") else {}
-            recommendations.append({
-                "title":  rec.get("SONG_TITLE", f"Similar Song {idx}"),
-                "artist": rec.get("ARTIST_NAME", "Unknown"),
-                "reason": "Similar audio profile",
-            })
-    except Exception:
-        recommendations = []
+        hit_score       = 0
 
-    # Hit score — placeholder until Saksham's hit model is trained
-    # TODO: hit_score = int(hit_model.predict(feature_vector)[0])
-    hit_score      = 0
-    nostalgia_score = 0
+    # Enrich mood from lyrics if available
+    mood = lyrics_features.get("mood", "Unknown")
 
     return jsonify({
         "hitScore":        hit_score,
-        "nostalgiaScore":  nostalgia_score,
-        "genre":           "Unknown",  # TODO: add genre classifier
-        "mood":            lyrics_features.get("mood", "Unknown"),
-        "tempo":           audio_features.get("tempo", 0),
-        "key":             str(audio_features.get("spotify_key", "Unknown")),
+        "concepts":        concepts,
         "recommendations": recommendations,
+        "mood":            mood,
+        "tempo":           audio_features.get("tempo", 0),
     })
 
 
