@@ -1,13 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Sidebar } from "@/components/Sidebar";
+import { Sidebar, type NavView } from "@/components/Sidebar";
 import { UploadSong } from "@/components/UploadSong";
 import { LyricsInput } from "@/components/LyricsInput";
 import { Analysis } from "@/components/Analysis";
+import { HistoryView } from "@/components/HistoryView";
 import { searchSong } from "@/services/songService";
 import { extractAudioFeatures } from "@/services/audioService";
 import { analyzeLyrics } from "@/services/lyricsService";
 import { predict, type Prediction } from "@/services/predictionService";
+import { saveToHistory } from "@/lib/history";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -24,6 +26,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [activeView, setActiveView] = useState<NavView>("analyze");
+
+  // Analyze state
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
@@ -59,6 +64,7 @@ function Index() {
 
       const result = await predict(audioResult, lyricsResult);
       setPrediction(result);
+      saveToHistory(result); // ← save to localStorage history
     } catch (err) {
       setError(err instanceof Error ? err.message : "Analysis failed — check the console.");
     } finally {
@@ -68,36 +74,46 @@ function Index() {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-background text-foreground">
-      <Sidebar />
+      <Sidebar active={activeView} onNavigate={setActiveView} />
+
       <main className="flex-1 p-4 md:p-6 overflow-auto">
-        {/* Two-column layout: inputs left, analysis right (bigger) */}
-        <div className="h-full grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-6 min-h-[calc(100vh-3rem)]">
 
-          {/* Left column — Upload + Lyrics stacked, Lyrics grows to fill */}
-          <div className="flex flex-col gap-4 lg:col-span-2 h-full">
-            <UploadSong
-              file={file}
-              setFile={setFile}
-              title={title}
-              setTitle={setTitle}
-              artist={artist}
-              setArtist={setArtist}
-              isLoading={isLoading}
-              onAnalyze={handleAnalyze}
-            />
-            <LyricsInput lyrics={lyrics} setLyrics={setLyrics} />
+        {/* ── Analyze view ── */}
+        {activeView === "analyze" && (
+          <div className="h-full grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-6 min-h-[calc(100vh-3rem)]">
+            <div className="flex flex-col gap-4 lg:col-span-2 h-full">
+              <UploadSong
+                file={file}
+                setFile={setFile}
+                title={title}
+                setTitle={setTitle}
+                artist={artist}
+                setArtist={setArtist}
+                isLoading={isLoading}
+                onAnalyze={handleAnalyze}
+              />
+              <LyricsInput lyrics={lyrics} setLyrics={setLyrics} />
+            </div>
+            <div className="lg:col-span-3 flex flex-col">
+              <Analysis prediction={prediction} isLoading={isLoading} error={error} />
+            </div>
           </div>
+        )}
 
-          {/* Right column — Analysis (wider) */}
-          <div className="lg:col-span-3 flex flex-col">
-            <Analysis
-              prediction={prediction}
-              isLoading={isLoading}
-              error={error}
-            />
+        {/* ── History view ── */}
+        {activeView === "history" && (
+          <div className="max-w-2xl mx-auto h-full flex flex-col min-h-[calc(100vh-3rem)]">
+            <HistoryView />
           </div>
+        )}
 
-        </div>
+        {/* ── Settings view (placeholder) ── */}
+        {activeView === "settings" && (
+          <div className="flex flex-col items-center justify-center flex-1 min-h-[calc(100vh-3rem)] gap-3">
+            <p className="text-sm text-muted-foreground">Settings coming soon.</p>
+          </div>
+        )}
+
       </main>
     </div>
   );

@@ -1,15 +1,21 @@
-import { useState } from "react";
 import { Sparkles, History, Settings as SettingsIcon, Menu, X } from "lucide-react";
+import { useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-const items = [
-  { id: "analyze", label: "Analyze", icon: Sparkles },
-  { id: "history", label: "History", icon: History },
+export type NavView = "analyze" | "history" | "settings";
+
+const items: { id: NavView; label: string; icon: React.ElementType }[] = [
+  { id: "analyze",  label: "Analyze",  icon: Sparkles },
+  { id: "history",  label: "History",  icon: History },
   { id: "settings", label: "Settings", icon: SettingsIcon },
 ];
 
-export function Sidebar() {
-  const [active, setActive] = useState("analyze");
+interface SidebarProps {
+  active: NavView;
+  onNavigate: (view: NavView) => void;
+}
+
+export function Sidebar({ active, onNavigate }: SidebarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const isMobile = useIsMobile();
 
@@ -37,7 +43,7 @@ export function Sidebar() {
               return (
                 <button
                   key={id}
-                  onClick={() => { setActive(id); setMenuOpen(false); }}
+                  onClick={() => { onNavigate(id); setMenuOpen(false); }}
                   className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                     isActive
                       ? "bg-accent text-foreground shadow-[inset_0_1px_0_0_oklch(1_0_0/8%)]"
@@ -68,7 +74,7 @@ export function Sidebar() {
           return (
             <button
               key={id}
-              onClick={() => setActive(id)}
+              onClick={() => onNavigate(id)}
               className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                 isActive
                   ? "bg-accent text-foreground shadow-[inset_0_1px_0_0_oklch(1_0_0/8%)]"
