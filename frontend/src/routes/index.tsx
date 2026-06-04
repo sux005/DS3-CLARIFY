@@ -73,8 +73,8 @@ function Index() {
         {/* Two-column layout: inputs left, analysis right (bigger) */}
         <div className="h-full grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-6 min-h-[calc(100vh-3rem)]">
 
-          {/* Left column — Upload + Lyrics stacked */}
-          <div className="flex flex-col gap-4 lg:col-span-2">
+          {/* Left column — Upload + Lyrics stacked, Lyrics grows to fill */}
+          <div className="flex flex-col gap-4 lg:col-span-2 h-full">
             <UploadSong
               file={file}
               setFile={setFile}
