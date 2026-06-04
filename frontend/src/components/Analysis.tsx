@@ -33,23 +33,22 @@ interface AnalysisProps {
 
 export function Analysis({ prediction, isLoading, error }: AnalysisProps) {
   const score = prediction?.hitScore ?? 0;
+  const concepts = prediction?.concepts ?? [];
 
-  // ── Loading ──────────────────────────────────────────────────────────────
   if (isLoading) {
     return (
       <Panel title="Analysis">
         <div className="flex flex-col items-center justify-center flex-1 gap-3 py-12">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-sm text-muted-foreground">Analyzing your song…</p>
+          <p className="text-sm text-muted-foreground">Analyzing your song...</p>
           <p className="text-xs text-muted-foreground/60">
-            First-time searches download audio — this may take 30–60s
+            First-time searches download audio, which may take 30-60s.
           </p>
         </div>
       </Panel>
     );
   }
 
-  // ── Error ─────────────────────────────────────────────────────────────────
   if (error) {
     return (
       <Panel title="Analysis">
@@ -61,27 +60,19 @@ export function Analysis({ prediction, isLoading, error }: AnalysisProps) {
     );
   }
 
-  // ── Results / Placeholder ─────────────────────────────────────────────────
   return (
     <Panel title="Analysis">
       <div className="flex flex-col gap-4">
-
-        {/* Model Outputs */}
         <SubCard title="Model Outputs" icon={<Cpu className="h-4 w-4" />}>
-          {prediction ? (
+          {prediction && concepts.length ? (
             <div className="mt-1 flex flex-wrap gap-2">
-              {[
-                { label: "Genre", value: prediction.genre },
-                { label: "Mood",  value: prediction.mood },
-                { label: "Tempo", value: `${Math.round(prediction.tempo)} BPM` },
-                { label: "Key",   value: prediction.key },
-              ].map(({ label, value }) => (
-                <div key={label} className="flex flex-col gap-0.5">
+              {concepts.slice(0, 5).map((concept) => (
+                <div key={concept.name} className="flex flex-col gap-0.5">
                   <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                    {label}
+                    {concept.name}
                   </span>
                   <span className="text-xs font-medium text-foreground px-2 py-1 rounded-md bg-secondary">
-                    {value}
+                    {concept.score.toFixed(1)}
                   </span>
                 </div>
               ))}
@@ -89,16 +80,15 @@ export function Analysis({ prediction, isLoading, error }: AnalysisProps) {
           ) : (
             <>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Run an analysis to see model predictions — genre, mood, tempo, key and
-                sentiment will appear here.
+                Run an analysis to see CBM concept predictions.
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {["Genre", "Mood", "Tempo", "Key"].map((t) => (
+                {["Love", "Heartbreak", "Partying", "Success"].map((label) => (
                   <span
-                    key={t}
+                    key={label}
                     className="text-[10px] uppercase tracking-wider px-2 py-1 rounded-md bg-secondary text-muted-foreground"
                   >
-                    {t}
+                    {label}
                   </span>
                 ))}
               </div>
@@ -106,13 +96,12 @@ export function Analysis({ prediction, isLoading, error }: AnalysisProps) {
           )}
         </SubCard>
 
-        {/* Song Recommendations */}
         <SubCard title="Song Recommendations" icon={<Disc3 className="h-4 w-4" />}>
           <ul className="space-y-2">
             {prediction?.recommendations?.length ? (
               prediction.recommendations.map((rec, i) => (
                 <li
-                  key={i}
+                  key={`${rec.title}-${rec.artist}-${i}`}
                   className="flex items-center gap-3 rounded-lg bg-secondary/40 px-3 py-2"
                 >
                   <div className="h-8 w-8 rounded-md bg-gradient-to-br from-primary/40 to-primary-glow/40 flex-shrink-0" />
@@ -120,10 +109,14 @@ export function Analysis({ prediction, isLoading, error }: AnalysisProps) {
                     <p className="text-xs font-medium text-foreground truncate">{rec.title}</p>
                     <p className="text-[10px] text-muted-foreground truncate">{rec.artist}</p>
                   </div>
+                  {typeof rec.similarity === "number" ? (
+                    <span className="text-[10px] text-muted-foreground">
+                      {(rec.similarity * 100).toFixed(0)}%
+                    </span>
+                  ) : null}
                 </li>
               ))
             ) : (
-              // Skeleton placeholders
               [1, 2, 3].map((i) => (
                 <li
                   key={i}
@@ -140,7 +133,6 @@ export function Analysis({ prediction, isLoading, error }: AnalysisProps) {
           </ul>
         </SubCard>
 
-        {/* Hit Score */}
         <SubCard title="Hit Score" icon={<Flame className="h-4 w-4" />}>
           <div className="flex items-end gap-3">
             <div className="text-4xl font-bold bg-gradient-to-br from-primary to-primary-glow bg-clip-text text-transparent">
@@ -159,11 +151,10 @@ export function Analysis({ prediction, isLoading, error }: AnalysisProps) {
           </div>
           <p className="text-xs text-muted-foreground mt-2">
             {prediction
-              ? `Nostalgia score: ${prediction.nostalgiaScore} / 100`
+              ? "Fusion model estimate of Billboard rank strength."
               : "Awaiting analysis to estimate commercial potential."}
           </p>
         </SubCard>
-
       </div>
     </Panel>
   );
